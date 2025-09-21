@@ -1,6 +1,15 @@
 #!/usr/bin/env bash
-# Configure /etc/hosts so localhost -> 127.0.0.2 and facebook.com -> 8.8.8.8
+# Configure /etc/hosts: localhost -> 127.0.0.2 and facebook.com -> 8.8.8.8
 
-sed -i 's/^[[:space:]]*127\.0\.0\.1[[:space:]]\+localhost[[:space:]]*$/127.0.0.2\tlocalhost/' /etc/hosts
-sed -i '/[[:space:]]facebook\.com[[:space:]]*$/d' /etc/hosts
-echo '8.8.8.8 facebook.com' >> /etc/hosts
+tmpfile="$(mktemp)"
+
+{
+  echo "127.0.0.2 localhost"
+  echo "8.8.8.8 facebook.com"
+  # keep everything else, but drop any previous localhost or facebook.com lines
+  grep -vE '^[[:space:]]*127\.0\.0\.[0-9]+[[:space:]]+localhost([[:space:]]|$)|[[:space:]]facebook\.com([[:space:]]|$)' /etc/hosts
+} > "$tmpfile"
+
+# overwrite /etc/hosts atomically without sed -i
+cat "$tmpfile" > /etc/hosts
+rm -f "$tmpfile"
