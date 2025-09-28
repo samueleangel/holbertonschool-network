@@ -1,0 +1,75 @@
+# What Happens When You Type https://www.google.com and Press Enter?
+
+This is a classic interview question for software engineers. It sounds simple, but under the hood it covers networking, servers, and security. Let’s break it down step by step.  
+
+---
+
+## 1. DNS Request  
+Your browser first needs an IP address for `www.google.com`.  
+- It checks its local cache.  
+- If not found, it asks the operating system, which may contact your ISP’s DNS resolver.  
+- The resolver queries the DNS hierarchy until it gets the right IP, e.g., `142.250.x.x`.  
+
+DNS is like the phone book of the internet: it translates names into machine addresses.  
+
+---
+
+## 2. TCP/IP  
+With the IP, your browser opens a connection using TCP.  
+- **IP** finds the path to the server.  
+- **TCP** sets up a reliable session with a three-way handshake: SYN → SYN-ACK → ACK.  
+
+Now both sides are ready to communicate.  
+
+---
+
+## 3. Firewall  
+Before traffic passes, firewalls check the request.  
+They filter packets based on IP, port, or protocol. If something looks suspicious, it’s blocked.  
+
+---
+
+## 4. HTTPS/SSL  
+Because you typed **https://**, encryption is required.  
+- Browser and server exchange certificates.  
+- They negotiate keys in the **TLS handshake**.  
+- All communication becomes encrypted, protecting privacy and data.  
+
+---
+
+## 5. Load Balancer  
+Google handles millions of requests per second. A **load balancer** chooses which server will process yours, based on load, location, or availability. This keeps traffic fast and reliable.  
+
+---
+
+## 6. Web Server  
+The request reaches a **web server** (like Nginx or Apache).  
+- It parses the HTTP request.  
+- If static content is needed, it returns it directly.  
+- Otherwise, it forwards the request deeper.  
+
+---
+
+## 7. Application Server  
+Dynamic logic happens here. Google’s application servers run the search engine code, process queries, and interact with other services.  
+
+---
+
+## 8. Database  
+To answer your query, the app server contacts Google’s distributed databases (like Bigtable or Spanner). The database returns results, which the app server formats.  
+
+---
+
+## 9. Response  
+Finally, the response travels back:  
+**Database → Application Server → Web Server → Load Balancer → Internet → Your Browser.**  
+
+The browser receives HTML, CSS, and JavaScript, then renders the familiar Google homepage.  
+
+---
+
+## Conclusion  
+Pressing **Enter** triggers a complex chain: DNS lookups, TCP/IP setup, firewall checks, TLS encryption, load balancing, web servers, application servers, and databases—all working in milliseconds.  
+
+Next time you search on Google, you’ll know the hidden journey behind that simple action.  
+
